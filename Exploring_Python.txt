@@ -46,6 +46,3 @@ Html и CSS информация:
 
 Размеры шрифта CSS:
     https://developer.mozilla.org/ru/docs/Web/CSS/font-size
-
-Новый репозиторий для WEBа:
-    https://github.com/Counter0021/python/blob/main/web_developer/django_projects/django_info.txt

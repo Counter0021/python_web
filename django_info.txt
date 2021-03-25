@@ -1,0 +1,76 @@
+Создать проект - django-admin startproject
+
+Запустить сервер с проектом - python manage.py runserver
+
+Вырубить сервер с проектом -  CTRL-BREAK (на клавиатуре справа с верху, рядом с PRINT_SCREEN и Scroll_lock
+
+Templates - шаблоны, лучше туда помещать HTML код
+
+Добавить шаблоны - перейти в settings.py:
+TEMPLATES:
+    DIRS: [Добавляем сюда папку]
+
+Добавить страницу на сайт:
+    перейти в urls.py
+    urlpatterns = [
+    path('имя/', модуль.функция),
+]
+
+Сделать страницу домена:
+    path('', модуль.функция),
+
+Конструктор Web сайтов
+    https://whimsical.com/my-boards-JZL4dD4iRTDGf7XgdD32SV
+
+Иконки для меню навигации:
+	https://material.io/resources/icons/?style=baseline
+
+Создать приложение
+	python manage.py startapp
+	django-admin startapp
+
+Приминить миграцию для приложений:
+	python manage.py migrate
+
+Создать миграцию новых файлов:
+	python manage.py makemigrations
+
+Создать админку:
+	python manage.py createsuperuser
+
+Любые статические файлы:
+	python manage.py collectstatic
+
+Джанго код в cmd:
+	python manage.py shell
+
+
+Подключить базу данных postgresql и создать проект:
+	django-admin startproject
+	Создать виртуальную среду, установить django и psycopg2 и Pillow
+	
+	Создать базу данных в SQL SHELL:
+		CREATE DATABASE testersdb;
+	В setting.py написать:
+		'ENGINE': 'django.db.backends.postgresql',
+        	'NAME': 'testersdb',
+        	'USER': 'postgres',
+        	'PASSWORD': '12345',
+        	'HOST': 'localhost',
+        	'PORT': '5432',
+
+	Применить миграцию:
+		python manage.py migrate
+
+	Запустить сервер:
+		python manage.py runserver
+
+
+Стилизация формы регестрации:
+	pip install django-crispy-forms
+
+Регестрация пользователей:
+	Не забыть в АДМИНЕ создать группу!
+
+Для запуска всех тестов:
+	python manage.py test

@@ -1,0 +1,51 @@
+Плейлист для изучения PyCharm и Github:
+    https://www.youtube.com/playlist?list=PLWZhPHTrxvZH7dh3cwdCadbf7BHkNpm17
+
+Лекции об ООП:
+    https://www.youtube.com/playlist?list=PLRDzFCPr95fIgPrFFW-0nXT5YH6ZnjRM6
+
+Текст лекций:
+    https://github.com/tkhirianov/pydatan
+
+API бесплатные:
+    https://github.com/public-apis/public-apis
+
+JSON форматор:
+    https://jsonformatter.curiousconcept.com/#
+
+Python docs:
+    https://docs.python.org/3/
+
+Информация о библиотеках:
+    https://pypi.org/search/
+
+Курс по python:
+    https://www.udemy.com/course/python-python-3/
+
+Курс HTML и CSS:
+    https://www.udemy.com/course/html5-oz/
+
+Курс Django, python, html и CSS:
+    https://www.udemy.com/course/python-pythondjango/
+
+Курс по DataScience:
+    https://www.udemy.com/course/data-science-python-3/
+
+Цвет в кодах (расширение Chrome):
+    https://chrome.google.com/webstore/detail/colorzilla/bhlhnicpbhignbdhedgjhgdocnmhomnp
+
+SQLite:
+    https://www.sqlite.org/index.html
+    https://www.w3schools.com/sql/
+
+Html и CSS информация:
+    https://developer.mozilla.org/ru/docs/Web/Guide/HTML/HTML5/Introduction_to_HTML5
+
+Шрифты для CSS (google):
+    https://fonts.google.com/specimen/Charm?preview.text_type=custom
+
+Размеры шрифта CSS:
+    https://developer.mozilla.org/ru/docs/Web/CSS/font-size
+
+Новый репозиторий для WEBа:
+    https://github.com/Counter0021/python/blob/main/web_developer/django_projects/django_info.txt

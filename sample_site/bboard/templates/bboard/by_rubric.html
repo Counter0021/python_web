@@ -6,7 +6,7 @@
     <h2>Rubric: {{ current_rubric.name }}</h2>
     {% for bb in bbs %}
         <div>
-            <h2>{{ bb.title }}</h2>
+            <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
             <p>{{ bb.content }}</p>
             <p>{{ bb.published }}</p>
         </div>

@@ -12,6 +12,13 @@ from django.views.generic.list import ListView
 
 from django.views.generic.dates import ArchiveIndexView
 
+from django.views.generic.base import RedirectView
+
+
+# Перенаправление
+class BbRedirectView(RedirectView):
+    url = '/bboard/detail/%(pk)d/'
+
 
 # Хронологический список записей
 class BbIndexView(ArchiveIndexView):

@@ -1,9 +1,10 @@
 from django.urls import path
 
-from .views import BbIndexView, BbByRubricView, BbAddView, BbDetailView, BbEditView, BbDeleteView
+from .views import BbIndexView, BbByRubricView, BbAddView, BbDetailView, BbEditView, BbDeleteView, BbRedirectView
 
 urlpatterns = [
     path('detail/<int:pk>/', BbDetailView.as_view(), name='detail'),
+    path('detail/<int:year>/<int:month>/<int:day>/<int:pk>/', BbRedirectView.as_view(), name='old_detail'),
     # URL параметр в <>, int - целочисленный тип параметра
     # rubric id — имя параметра контроллера, которому будет присвоено значение этого URL параметра
     # параметризованный параметр

@@ -1,0 +1,18 @@
+{% extends 'layout/basic.html' %}
+
+{% block title %}Update advertisement{% endblock %}
+
+{% block content %}
+
+    <h2>Update advertisement</h2>
+    <form method="post">
+        <!--Он создает в форме скрытое поле, хранящее цифровой жетон, получив который контроллер поймет,
+        что данные были отправлены с текущего сайта и им можно доверять-->
+        {% csrf_token %}
+        <!--Для вывода формы, элементы управления которой находятся на отдельных абзацах,
+        применяется метод as_p() класса формы, он генерирует только элементы управления-->
+        {{ form.as_p }}
+        <input type="submit" value="Update">
+    </form>
+
+{% endblock %}

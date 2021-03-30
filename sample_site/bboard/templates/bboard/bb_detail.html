@@ -3,6 +3,7 @@
 {% block title %} {{ bb.title }} {% endblock %}
 
 {% block content %}
+    <a href="{% url 'update' bb.pk %}">Update</a>
     <p>Rubric: {{ bb.rubric.name }}</p>
     <h2>{{ bb.title }}</h2>
     <p>{{ bb.content }}</p>

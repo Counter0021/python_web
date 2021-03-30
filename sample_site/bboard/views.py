@@ -6,13 +6,36 @@ from .models import Bb, Rubric
 
 from .forms import BbForm
 
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 
 from django.views.generic.list import ListView
 
 from django.views.generic.dates import ArchiveIndexView
 
 from django.views.generic.base import RedirectView
+
+
+# Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
+# Смешанная функциональность (Вывод сведенья о выбранной записи и набор связанных с ней записей)
+class BbByRubricView(SingleObjectMixin, ListView):
+    template_name = 'bboard/by_rubric.html'
+    pk_url_kwarg = 'rubric_id'
+
+    # Извлекаем рубрику
+    def get(self, request, **kwargs):
+        self.object = self.get_object(queryset=Rubric.objects.all())
+        return super().get(request, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_rubric'] = self.object
+        context['rubrics'] = Rubric.objects.all()
+        context['bbs'] = context['object_list']
+        return context
+
+    # Возвращаем перечень объявлений, связанных с найденной рубрикой
+    def get_queryset(self):
+        return self.object.bb_set.all()
 
 
 # Перенаправление
@@ -58,6 +81,7 @@ class BbEditView(UpdateView):
         return context
 
 
+# Лучше использовать CreateView
 # Добавление нового объявления
 class BbAddView(FormView):
     template_name = 'bboard/create.html'
@@ -85,19 +109,19 @@ class BbAddView(FormView):
         return reverse('by_rubric', kwargs={'rubric_id': self.object.cleaned_data['rubric'].pk})
 
 
-# Вывод объявлений из рубрики
-class BbByRubricView(ListView):
-    template_name = 'bboard/by_rubric.html'
-    context_object_name = 'bbs'
-
-    def get_queryset(self):
-        return Bb.objects.filter(rubric=self.kwargs['rubric_id'])
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['rubrics'] = Rubric.objects.all()
-        context['current_rubric'] = Rubric.objects.get(pk=self.kwargs['rubric_id'])
-        return context
+# # Вывод объявлений из рубрики
+# class BbByRubricView(ListView):
+#     template_name = 'bboard/by_rubric.html'
+#     context_object_name = 'bbs'
+#
+#     def get_queryset(self):
+#         return Bb.objects.filter(rubric=self.kwargs['rubric_id'])
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['rubrics'] = Rubric.objects.all()
+#         context['current_rubric'] = Rubric.objects.get(pk=self.kwargs['rubric_id'])
+#         return context
 
 
 # Вывод страницы с объявлением, выбранным посетителем

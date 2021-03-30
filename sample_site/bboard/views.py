@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic.edit import CreateView, FormView, UpdateView
+from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 
 from .models import Bb, Rubric
@@ -9,6 +9,34 @@ from .forms import BbForm
 from django.views.generic.detail import DetailView
 
 from django.views.generic.list import ListView
+
+from django.views.generic.dates import ArchiveIndexView
+
+
+# Хронологический список записей
+class BbIndexView(ArchiveIndexView):
+    model = Bb
+    date_field = 'published'
+    date_list_period = 'year'
+    template_name = 'bboard/index.html'
+    context_object_name = 'bbs'
+    allow_empty = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        return context
+
+
+# Удаление
+class BbDeleteView(DeleteView):
+    model = Bb
+    success_url = '/bboard/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        return context
 
 
 # Исправление объявления

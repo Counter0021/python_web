@@ -1,0 +1,17 @@
+{% extends "layout/basic.html" %}
+
+{% block title %}Delete advertise {% endblock %}
+
+{% block content %}
+
+    <h2>Delete advertise</h2>
+    <p>Rubric: {{ bb.rubric.name }}</p>
+    <p>Product: {{ bb.title }}</p>
+    <p>{{ bb.content }}</p>
+    <p>Price: {{ bb.price }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
+
+{% endblock %}

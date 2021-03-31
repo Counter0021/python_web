@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 
 from .models import Bb, Rubric
 
-from .forms import BbForm
+from .forms import BbForm, RubricBaseFormSet
 
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
@@ -15,6 +15,8 @@ from django.views.generic.dates import ArchiveIndexView
 from django.views.generic.base import RedirectView
 
 from django.core.paginator import Paginator
+
+from django.forms import modelformset_factory
 
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
@@ -179,3 +181,17 @@ def index(request):
     page = paginator.get_page(page_num)
     context = {'rubrics': rubrics, 'page': page, 'bbs': page.object_list}
     return render(request, 'bboard/index.html', context)
+
+
+# Наборы форм
+def rubrics(request):
+    RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_delete=True, formset=RubricBaseFormSet)
+    if request.method == 'POST':
+        formset = RubricFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('index')
+    else:
+        formset = RubricFormSet()
+    context = {'formset': formset}
+    return render(request, 'bboard/rubrics.html', context)

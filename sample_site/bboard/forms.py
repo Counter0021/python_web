@@ -1,4 +1,4 @@
-from django.forms import ModelForm, modelform_factory, DecimalField
+from django.forms import ModelForm, modelform_factory, DecimalField, BaseModelFormSet
 from django import forms
 
 from .models import Bb, Rubric
@@ -77,3 +77,13 @@ class BbForm(ModelForm):
 
         if errors:
             raise ValidationError(errors)
+
+
+# Валидация наборов форм
+class RubricBaseFormSet(BaseModelFormSet):
+    def clean(self):
+        super().clean()
+        names = [form.cleaned_data['name'] for form in self.forms if 'name' in form.cleaned_data]
+        if 'Property' not in names:
+            raise ValidationError('Add rubric property!')
+

@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import BbIndexView, BbByRubricView, BbAddView, BbDetailView, BbEditView, BbDeleteView, BbRedirectView
+from .views import BbIndexView, BbByRubricView, BbAddView, BbDetailView, BbEditView, BbDeleteView, BbRedirectView, \
+    rubrics
 
 urlpatterns = [
     path('detail/<int:pk>/', BbDetailView.as_view(), name='detail'),
@@ -14,4 +15,5 @@ urlpatterns = [
     path('add/', BbAddView.as_view(), name='add'),
     path('update/<int:pk>/', BbEditView.as_view(), name='update'),
     path('delete/<int:pk>/', BbDeleteView.as_view(), name='delete'),
+    path('add_form/', rubrics, name='add_form')
 ]

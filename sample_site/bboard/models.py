@@ -11,7 +11,7 @@ class Bb(models.Model):
     # Поле внешнего ключа, устанавливающее связь между текущей записью этой модели и записью модели Rubric
     # (связь один-со-многими)
     # on_delete=models.PROTECT чтобы после удаления категории, объявления остались
-    rubric = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT, verbose_name='Rubric')
+    rubric = models.ForeignKey('Rubric', null=True, on_delete=models.CASCADE, verbose_name='Rubric')
 
     # Исправления
     class Meta:

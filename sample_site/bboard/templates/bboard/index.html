@@ -2,6 +2,19 @@
 
 {% block content %}
 
+    <!--Код для пагинатора-->
+    <div>
+        {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number }}">&lt;</a>
+            &nbsp; &nbsp; | &nbsp; &nbsp;
+        {% endif %}
+        Part №{{ page.number }} of {{ page.paginator.num_pages }}
+        {% if page.has_next %}
+            &nbsp;&nbsp; | &nbsp;&nbsp;
+            <a href="?page={{ page.next_page_number }}">&gt;</a>
+        {% endif %}
+    </div>
+
     {% for bb in bbs %}
         <div>
             <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title }}</a></h2>

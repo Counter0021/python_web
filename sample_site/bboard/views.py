@@ -14,6 +14,8 @@ from django.views.generic.dates import ArchiveIndexView
 
 from django.views.generic.base import RedirectView
 
+from django.core.paginator import Paginator
+
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
 # Смешанная функциональность (Вывод сведенья о выбранной записи и набор связанных с ней записей)
@@ -165,12 +167,15 @@ class BbDetailView(DetailView):
 #     return render(request, 'bboard/by_rubric.html', context)
 
 
-# Домашняя страница
+# Домашняя страница с пагинатором
 def index(request):
     bbs = Bb.objects.all()
     rubrics = Rubric.objects.all()
-    context = {
-        'bbs': bbs,
-        'rubrics': rubrics
-    }
+    paginator = Paginator(bbs, 2)
+    if 'page' in request.GET:
+        page_num = request.GET['page']
+    else:
+        page_num = 1
+    page = paginator.get_page(page_num)
+    context = {'rubrics': rubrics, 'page': page, 'bbs': page.object_list}
     return render(request, 'bboard/index.html', context)

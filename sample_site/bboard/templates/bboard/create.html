@@ -11,8 +11,29 @@
         {% csrf_token %}
         <!--Для вывода формы, элементы управления которой находятся на отдельных абзацах,
         применяется метод as_p() класса формы, он генерирует только элементы управления-->
-        {{ form.as_p }}
-        <input type="submit" value="Add">
+        <!--{{ form.as_p }}-->
+
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% if form.non_field_errors %}
+        <ul>
+            {% for error in form.non_field_errors %}
+            <li><em>{{ error|escape }}</em></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% for field in form.visible_fields %}
+            {% if field.errors %}
+                <ul>
+                    {% for error in field.errors %}
+                    <li><em>{{ error|escape }}</em></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p>{{ field.label_tag }}<br>{{ field }}<br>{{ field.help_text }}</p>
+        {% endfor %}
+        <p><input type="submit" value="Add"></p>
     </form>
 
 {% endblock %}

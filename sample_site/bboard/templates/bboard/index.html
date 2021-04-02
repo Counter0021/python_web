@@ -1,6 +1,11 @@
 {% extends 'layout/basic.html' %}
 
 {% block content %}
+    <div>
+        {% if user.is_authenticated %}
+        <p>Hello {{ user.username }}</p>
+        {% endif %}
+    </div>
 
     <!--Код для пагинатора-->
     <div>

@@ -14,10 +14,14 @@
         </header>
         <nav>
             <a href="{% url 'index' %}">Home</a>
-            <a href="{% url 'add' %}">Add</a>
-            {% for rubric in rubrics %}
-            <a href="{% url 'by_rubric' rubric.pk %}">{{ rubric.name }}</a>
-            {% endfor %}
+            {% if 'bboard.add_bb' in perms %}
+                <a href="{% url 'add' %}">Add</a>
+            {% endif %}
+            {% if perms.bboard.change_bb %}
+                {% for rubric in rubrics %}
+                    <a href="{% url 'by_rubric' rubric.pk %}">{{ rubric.name }}</a>
+                {% endfor %}
+            {% endif %}
         </nav>
         <section>
             {% block content %}

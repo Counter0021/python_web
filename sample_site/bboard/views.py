@@ -18,6 +18,12 @@ from django.core.paginator import Paginator
 
 from django.forms import modelformset_factory, inlineformset_factory
 
+from django.contrib.auth.views import redirect_to_login
+
+from django.contrib.auth.decorators import login_required, permission_required
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
+
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
 # Смешанная функциональность (Вывод сведенья о выбранной записи и набор связанных с ней записей)
@@ -63,7 +69,9 @@ class BbIndexView(ArchiveIndexView):
 
 
 # Удаление
-class BbDeleteView(DeleteView):
+class BbDeleteView(PermissionRequiredMixin, DeleteView):
+    # Разрешаем удалять только тем, кто имеет право 'bboard.delete_bb'
+    permission_required = ('bboard.delete_bb',)
     model = Bb
     success_url = '/bboard/'
 
@@ -74,7 +82,7 @@ class BbDeleteView(DeleteView):
 
 
 # Исправление объявления
-class BbEditView(UpdateView):
+class BbEditView(UserPassesTestMixin, UpdateView):
     model = Bb
     form_class = BbForm
     success_url = '/bboard/'
@@ -84,10 +92,15 @@ class BbEditView(UpdateView):
         context['rubrics'] = Rubric.objects.all()
         return context
 
+    # Разрешаем исправлять объявления только пользователям со статусом суперюзер
+    def test_func(self):
+        return self.request.user.is_superuser
+
 
 # Лучше использовать CreateView
 # Добавление нового объявления
-class BbAddView(FormView):
+# Доступ к добавлению только зарегистрированных пользователей
+class BbAddView(LoginRequiredMixin, FormView):
     template_name = 'bboard/create.html'
     form_class = BbForm
     initial = {'price': 0.0}
@@ -171,6 +184,8 @@ class BbDetailView(DetailView):
 
 # Домашняя страница с пагинатором
 def index(request):
+    # Выполнил ли юзер вход?
+    # if request.user.is_authenticated:
     bbs = Bb.objects.all()
     rubrics = Rubric.objects.all()
     paginator = Paginator(bbs, 2)
@@ -184,17 +199,25 @@ def index(request):
 
 
 # Наборы форм
+# Допускает к странице только пользователей, выполнивших вход
+@login_required
+# Допуск только тех, кто имеет права
+@permission_required(('bboard.add_rubric', 'bboard.change_rubric', 'bboard.delete_rubric'))
 def rubrics(request):
-    RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_delete=True, formset=RubricBaseFormSet)
-    if request.method == 'POST':
-        formset = RubricFormSet(request.POST)
-        if formset.is_valid():
-            formset.save()
-            return redirect('index')
+    # Непосредственные проверки авторизации
+    if request.user.is_authenticated:
+        RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_delete=True, formset=RubricBaseFormSet)
+        if request.method == 'POST':
+            formset = RubricFormSet(request.POST)
+            if formset.is_valid():
+                formset.save()
+                return redirect('index')
+        else:
+            formset = RubricFormSet()
+        context = {'formset': formset}
+        return render(request, 'bboard/rubrics.html', context)
     else:
-        formset = RubricFormSet()
-    context = {'formset': formset}
-    return render(request, 'bboard/rubrics.html', context)
+        return redirect_to_login(reverse('index'))
 
 
 # Встроенные наборы форм

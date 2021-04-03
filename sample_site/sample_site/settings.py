@@ -78,6 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        # Все операции с базой данных, происходящие в контроллере, выполняются в одной транзакции
+        # 'ATOMIC_REQUEST': True,
     }
 }
 

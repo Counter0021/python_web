@@ -24,6 +24,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 
+from django.db.transaction import atomic
+
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
 # Смешанная функциональность (Вывод сведенья о выбранной записи и набор связанных с ней записей)
@@ -220,6 +222,9 @@ def rubrics(request):
         return redirect_to_login(reverse('index'))
 
 
+# Автоматическое выполнение транзакций
+# Либо для объединения транзакции использовать декоратор
+# @atomic
 # Встроенные наборы форм
 def bbs(request, rubric_id):
     BbsFormSet = inlineformset_factory(Rubric, Bb, form=BbForm, extra=1)
@@ -227,7 +232,9 @@ def bbs(request, rubric_id):
     if request.method == 'POST':
         formset = BbsFormSet(request.POST, instance=rubric)
         if formset.is_valid():
-            formset.save()
+            # Выполняем сохранение всех форм в 1 транзакции
+            with atomic():
+                formset.save()
             return redirect('index')
     else:
         formset = BbsFormSet(instance=rubric)

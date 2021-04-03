@@ -24,6 +24,7 @@ class RubricManager(models.Manager):
     def order_by_bb_count(self):
         return self.get_queryset().order_by_bb_count()
 
+
 # Модель объявлений
 class Bb(models.Model):
     title = models.CharField(max_length=50, verbose_name='Product')

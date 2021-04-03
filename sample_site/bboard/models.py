@@ -1,8 +1,28 @@
 from django.db import models
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 
+
+# Собственный набор записей, вычисляющий количество объявлений в каждой рубрике, сортирующий по убыванию количества
+class RubricQuerySet(models.QuerySet):
+    def order_by_bb_count(self):
+        return self.annotate(cnt=models.Count('bb')).order_by('-cnt')
+
+
+# Диспетчер обратной связи
+class BbManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().order_by('price')
+
+
+# Диспетчер записей, обслуживающий набор записей
+class RubricManager(models.Manager):
+    def get_queryset(self):
+        return RubricQuerySet(self.model, using=self._db)
+
+    def order_by_bb_count(self):
+        return self.get_queryset().order_by_bb_count()
 
 # Модель объявлений
 class Bb(models.Model):
@@ -16,6 +36,9 @@ class Bb(models.Model):
     # on_delete=models.PROTECT чтобы после удаления категории, объявления остались
     rubric = models.ForeignKey('Rubric', null=True, on_delete=models.CASCADE, verbose_name='Rubric')
 
+    objects = models.Manager()
+    by_price = BbManager()
+
     # Исправления
     class Meta:
         # Название во множественном числе
@@ -28,6 +51,9 @@ class Bb(models.Model):
 
 class Rubric(models.Model):
     name = models.CharField(max_length=20, db_index=True, verbose_name='Name')
+    objects = models.Manager()
+    # Наш диспетчер записей
+    bbs = RubricManager()
 
     class Meta:
         verbose_name_plural = 'Rubrics'

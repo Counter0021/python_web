@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
 
 
 # Модель объявлений
@@ -33,3 +36,46 @@ class Rubric(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# Полиморфная связь
+# Заметки для связи с моделями
+class Note(models.Model):
+    content = models.TextField()
+    # Поле, хранящее тип связываемой модели
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    # Поле, хранящее ключ связываемой записи
+    object_id = models.PositiveIntegerField()
+    # Поле полиморфной связи
+    content_object = GenericForeignKey(ct_field='content_type', fk_field='object_id')
+
+
+# Абстрактная модель
+class Message(models.Model):
+    content = models.TextField()
+    name = models.CharField(max_length=20)
+    email = models.EmailField()
+
+    class Meta:
+        abstract = True
+        ordering = ['name']
+
+
+class PrivateMessage(Message):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Переопределяем поле
+    name = models.CharField(max_length=40)
+    # Удаляем поле
+    email = None
+
+    # Наследуем класс Meta
+    class Meta(Message.Meta):
+        pass
+
+
+# Прокси модель
+# Сортировка рубрик по названию
+class RevRubric(Rubric):
+    class Meta:
+        proxy = True
+        ordering = ['-name']

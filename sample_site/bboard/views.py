@@ -4,7 +4,7 @@ from django.urls import reverse_lazy, reverse
 
 from .models import Bb, Rubric
 
-from .forms import BbForm, RubricBaseFormSet
+from .forms import BbForm, RubricBaseFormSet, SearchForm
 
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
@@ -16,7 +16,7 @@ from django.views.generic.base import RedirectView
 
 from django.core.paginator import Paginator
 
-from django.forms import modelformset_factory, inlineformset_factory
+from django.forms import modelformset_factory, inlineformset_factory, formset_factory
 
 from django.contrib.auth.views import redirect_to_login
 
@@ -240,3 +240,38 @@ def bbs(request, rubric_id):
         formset = BbsFormSet(instance=rubric)
     context = {'formset': formset, 'current_rubric': rubric}
     return render(request, 'bboard/bbs.html', context)
+
+
+# Извлекает данные из SearchForm и использует их для указания параметров фильтрации объявлений
+def search(request):
+    if request.method == 'POST':
+        sf = SearchForm(request.POST)
+        if sf.is_valid():
+            keyword = sf.cleaned_data['keyword']
+            rubric_id = sf.cleaned_data['rubric'].pk
+            bbs = Bb.objects.filter(title__icontains=keyword, rubric=rubric_id)
+            context = {'bbs': bbs}
+            return render(request, 'bboard/search_results.html', context)
+    else:
+        sf = SearchForm()
+    context = {'form': sf}
+    return render(request, 'bboard/search.html', context)
+
+
+# Обрабатка набор форм, не связанных с моделью
+def formset_processing(request):
+    FS = formset_factory(SearchForm, extra=3, can_order=True, can_delete=True)
+
+    if request.method == 'POST':
+        formset = FS(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                if form.cleaned_data and not form.cleaned_data['DELETE']:
+                    keyword = form.cleaned_data['keyword']
+                    rubric_id = form.cleaned_data['rubric'].pk
+                    order = form.cleaned_data['ORDER']
+            return render(request, 'bboard/process_results.html')
+    else:
+        formset = FS(auto_id=False)
+    context = {'formset': formset}
+    return render(request, 'bboard/formset.html', context)

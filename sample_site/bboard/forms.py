@@ -87,3 +87,22 @@ class RubricBaseFormSet(BaseModelFormSet):
         if 'Property' not in names:
             raise ValidationError('Add rubric property!')
 
+
+# Форма не связанная с моделью, предназначенная для указания искомого ключевого слова и рубрики,
+# в которой осуществляется поиск объявлений
+class SearchForm(forms.Form):
+    # CSS Стили форм
+    error_css_class = 'error'
+    required_css_class = 'required'
+    keyword = forms.CharField(max_length=20, label='Search word')
+    rubric = forms.ModelChoiceField(queryset=Rubric.objects.all(), label='Rubric')
+
+
+# Переупорядочивания форм в наборе с помощью обычного поля ввода
+class BaseRubricFormSet(forms.BaseModelFormSet):
+    ordering_widget = forms.TextInput
+
+
+# Эта возможность пригодится при необходимости задействовать какую-либо дополнительную библиотеку,
+# содержащую подходящий элемент управления.
+RubricFormSet = modelform_factory(Rubric, fields=('name',), can_order=True, can_delete=True, formset=BaseRubricFormSet)

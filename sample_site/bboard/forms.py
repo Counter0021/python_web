@@ -8,6 +8,8 @@ from django.forms.widgets import Select
 from django.core import validators
 from django.core.validators import ValidationError
 
+from captcha.fields import CaptchaField
+
 
 # Если редко используется
 # # Фабрика классов modelform_factory()
@@ -52,6 +54,9 @@ class BbForm(ModelForm):
     rubric = forms.ModelChoiceField(queryset=Rubric.objects.all(),
                                     label='Rubric', help_text='Please choose rubric!',
                                     widget=forms.widgets.Select(attrs={'size': 8}))
+    # Каптча
+    captcha = CaptchaField(label='Enter text from image', error_messages={'invalid': 'False text'},
+                           generator='captcha.helpers.math_challenge')
 
     class Meta:
         model = Bb
@@ -102,7 +107,6 @@ class SearchForm(forms.Form):
 class BaseRubricFormSet(forms.BaseModelFormSet):
     ordering_widget = forms.TextInput
 
-
 # Эта возможность пригодится при необходимости задействовать какую-либо дополнительную библиотеку,
 # содержащую подходящий элемент управления.
-RubricFormSet = modelform_factory(Rubric, fields=('name',), can_order=True, can_delete=True, formset=BaseRubricFormSet)
+# RubricFormSet = modelform_factory(Rubric, fields=('name',), can_order=True, can_delete=True, formset=BaseRubricFormSet)

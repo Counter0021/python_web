@@ -27,4 +27,5 @@ urlpatterns = [
     path('accounts/reset/done/',
          PasswordResetCompleteView.as_view(template_name='registration/password_confirmed.html'),
          name='password_reset_complete'),
+    path('captcha/', include('captcha.urls')),
 ]

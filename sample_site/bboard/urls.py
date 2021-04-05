@@ -1,10 +1,11 @@
 from django.urls import path
 
 from .views import BbIndexView, BbByRubricView, BbAddView, BbDetailView, BbEditView, BbDeleteView, BbRedirectView, \
-    rubrics, bbs, formset_processing, add_image
+    rubrics, bbs, formset_processing, add_image, delete_image
     # get
 
 urlpatterns = [
+    path('delete_image/<int:pk>/', delete_image, name='delete_image'),
     path('add_image/', add_image, name='add_image'),
     path('detail/<int:pk>/', BbDetailView.as_view(), name='detail'),
     path('detail/<int:year>/<int:month>/<int:day>/<int:pk>/', BbRedirectView.as_view(), name='old_detail'),

@@ -10,6 +10,8 @@ from django.core.validators import ValidationError
 
 from captcha.fields import CaptchaField
 
+from easy_thumbnails.widgets import ImageClearableFileInput
+
 
 # Если редко используется
 # # Фабрика классов modelform_factory()
@@ -116,7 +118,7 @@ class BaseRubricFormSet(forms.BaseModelFormSet):
 
 # Форма с изображением
 class ImgForm(forms.ModelForm):
-    img = forms.ImageField(label='Image',
+    img = forms.ImageField(widget=ImageClearableFileInput(thumbnail_options={'size': (300, 200)}), label='Image',
                            validators=[validators.FileExtensionValidator(allowed_extensions=('gif', 'jpg', 'png'))],
                            error_messages={
                                'invalid_extension': 'This format is not supported'

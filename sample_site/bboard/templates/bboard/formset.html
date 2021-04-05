@@ -1,18 +1,21 @@
 {% extends 'layout/basic.html' %}
+{% load bootstrap4 %}
 
 {% block content %}
 
     <h2>Rubrics</h2>
     <form method="post">
         {% csrf_token %}
-        {{ formset.management_form }}
-        <table>
-            {% for form in formset %}
-                <tr><td colspan="2">{{ form.name }}</td></tr>
-                <tr><td>{{ form.ORDER }}</td><td>{{ form.DELETE }}</td></tr>
-            {% endfor %}
-        </table>
-        <p><input type="submit" value="Save"></p>
+<!--        {{ formset.management_form }}-->
+<!--        <table>-->
+<!--            {% for form in formset %}-->
+<!--                <tr><td colspan="2">{{ form.name }}</td></tr>-->
+<!--                <tr><td>{{ form.ORDER }}</td><td>{{ form.DELETE }}</td></tr>-->
+<!--            {% endfor %}-->
+<!--        </table>-->
+<!--        <p><input type="submit" value="Save"></p>-->
+        {% bootstrap_formset formset %}
+        {% buttons submit='Save' %}{% endbuttons %}
     </form>
 
 {% endblock %}

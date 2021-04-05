@@ -1,4 +1,5 @@
 {% extends 'layout/basic.html' %}
+{% load bbcode_tags %}
 
 {% block content %}
     <div>
@@ -23,7 +24,7 @@
     {% for bb in bbs %}
         <div>
             <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
-            <p>{{ bb.content }}</p>
+            {% bbcode bb.content %}
             <p><a href="{% url 'by_rubric' bb.rubric.pk %}">{{ bb.rubric.name }}</a></p>
             <p>{{ bb.published }}</p>
         </div>

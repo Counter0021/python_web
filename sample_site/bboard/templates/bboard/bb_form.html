@@ -1,4 +1,5 @@
 {% extends 'layout/basic.html' %}
+{% load bootstrap4 %}
 
 {% block title %}Update advertisement{% endblock %}
 
@@ -11,8 +12,10 @@
         {% csrf_token %}
         <!--Для вывода формы, элементы управления которой находятся на отдельных абзацах,
         применяется метод as_p() класса формы, он генерирует только элементы управления-->
-        {{ form.as_p }}
-        <input type="submit" value="Update">
+        <!--{{ form.as_p }}-->
+        {% bootstrap_form form exclude='rubric' %}
+        {% buttons submit='Update' %}{% endbuttons %}
+        <!--<input type="submit" value="Update">-->
     </form>
 
 {% endblock %}

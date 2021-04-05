@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bboard.apps.BboardConfig',
     'captcha',
+    'django.contrib.postgres',
+    'localflavor',
+    'precise_bbcode',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [

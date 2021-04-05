@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
+from precise_bbcode.fields import BBCodeTextField
 
 
 # Собственный набор записей, вычисляющий количество объявлений в каждой рубрике, сортирующий по убыванию количества

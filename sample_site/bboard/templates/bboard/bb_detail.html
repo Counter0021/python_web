@@ -1,4 +1,5 @@
 {% extends 'layout/basic.html' %}
+{% load filtersandtags %}
 
 {% block title %} {{ bb.title }} {% endblock %}
 
@@ -8,5 +9,7 @@
     <p>Rubric: {{ bb.rubric.name }}</p>
     <h2>{{ bb.title }}</h2>
     <p>{{ bb.content }}</p>
-    <p>Price: {{ bb.price }}</p>
+    <p>Price: {{ bb.price|currency }}</p>
+
+    {% ulist '1' '2' '3' '4' '5' %}
 {% endblock %}

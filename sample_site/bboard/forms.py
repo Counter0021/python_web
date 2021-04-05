@@ -1,7 +1,7 @@
 from django.forms import ModelForm, modelform_factory, DecimalField, BaseModelFormSet
 from django import forms
 
-from .models import Bb, Rubric
+from .models import Bb, Rubric, Img
 
 from django.forms.widgets import Select
 
@@ -107,6 +107,22 @@ class SearchForm(forms.Form):
 class BaseRubricFormSet(forms.BaseModelFormSet):
     ordering_widget = forms.TextInput
 
+
 # Эта возможность пригодится при необходимости задействовать какую-либо дополнительную библиотеку,
 # содержащую подходящий элемент управления.
-# RubricFormSet = modelform_factory(Rubric, fields=('name',), can_order=True, can_delete=True, formset=BaseRubricFormSet)
+# RubricFormSet = modelform_factory(Rubric, fields=('name',),
+#                                   can_order=True, can_delete=True, formset=BaseRubricFormSet)
+
+
+# Форма с изображением
+class ImgForm(forms.ModelForm):
+    img = forms.ImageField(label='Image',
+                           validators=[validators.FileExtensionValidator(allowed_extensions=('gif', 'jpg', 'png'))],
+                           error_messages={
+                               'invalid_extension': 'This format is not supported'
+                           })
+    description = forms.CharField(label='Description', widget=forms.widgets.Textarea())
+
+    class Meta:
+        model = Img
+        fields = '__all__'

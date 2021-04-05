@@ -107,3 +107,18 @@ class RevRubric(Rubric):
     class Meta:
         proxy = True
         ordering = ['-name']
+
+
+# Изображения
+class Img(models.Model):
+    img = models.ImageField(verbose_name='Image')
+    description = models.TextField(verbose_name='Description')
+
+    class Meta:
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'
+
+    # Удаление выгруженного файла
+    # def delete(self, *args, **kwargs):
+    #     self.img.delete(save=False)
+    #     super().delete(*args, **kwargs)

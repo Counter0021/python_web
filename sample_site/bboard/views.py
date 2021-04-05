@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 
-from .models import Bb, Rubric
+from .models import Bb, Rubric, Img
 
-from .forms import BbForm, RubricBaseFormSet, SearchForm
+from .forms import BbForm, RubricBaseFormSet, SearchForm, ImgForm
 
 from django.views.generic.detail import DetailView, SingleObjectMixin
 
@@ -275,3 +275,25 @@ def formset_processing(request):
         formset = FS(auto_id=False)
     context = {'formset': formset}
     return render(request, 'bboard/formset.html', context)
+
+
+# Сохранение выгруженного графического файла в модель
+def add_image(request):
+    if request.method == 'POST':
+        form = ImgForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = ImgForm()
+
+    context = {'form': form}
+    return render(request, 'bboard/add_image.html', context)
+
+
+# Удаление выгруженного графического файла с записью модели
+def delete_image(request, pk):
+    img = Img.objects.get(pk=pk)
+    img.img.delete()
+    img.delete()
+    return redirect('index')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Bb, Rubric
+from .models import Bb, Rubric, Img
 
 
 # Свои параметры представления модели
@@ -15,3 +15,5 @@ class BbAdmin(admin.ModelAdmin):
 
 admin.site.register(Bb, BbAdmin)
 admin.site.register(Rubric)
+admin.site.register(Img)
+

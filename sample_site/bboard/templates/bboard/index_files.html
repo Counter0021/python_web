@@ -1,0 +1,10 @@
+{% extends 'layout/basic.html' %}
+{% block title %}Update advertisement{% endblock %}
+
+{% block content %}
+    {% for img in imgs %}
+        <div class="image">
+            <p><img src="{% url 'get' filename=img %}"></p>
+        </div>
+    {% endfor %}
+{% endblock %}

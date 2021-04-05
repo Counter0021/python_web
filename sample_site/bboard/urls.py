@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import BbIndexView, BbByRubricView, BbAddView, BbDetailView, BbEditView, BbDeleteView, BbRedirectView, \
     rubrics, bbs, formset_processing, add_image
+    # get
 
 urlpatterns = [
     path('add_image/', add_image, name='add_image'),
@@ -18,5 +19,6 @@ urlpatterns = [
     path('delete/<int:pk>/', BbDeleteView.as_view(), name='delete'),
     path('add_form/', rubrics, name='add_form'),
     path('bbs/<int:rubric_id>', bbs, name='bbs'),
-    path('form/', formset_processing, name='form')
+    path('form/', formset_processing, name='form'),
+    # path('get/<path:filename>', get, name='get'),
 ]

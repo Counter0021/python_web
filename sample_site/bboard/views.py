@@ -26,6 +26,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, 
 
 from django.db.transaction import atomic
 
+from sample_site.settings import BASE_DIR
+from datetime import datetime
+import os
+from django.http import FileResponse
+
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
 # Смешанная функциональность (Вывод сведенья о выбранной записи и набор связанных с ней записей)
@@ -277,6 +282,7 @@ def formset_processing(request):
     return render(request, 'bboard/formset.html', context)
 
 
+# Высокоуровневые средства для выгруженных файлов
 # Сохранение выгруженного графического файла в модель
 def add_image(request):
     if request.method == 'POST':
@@ -297,3 +303,41 @@ def delete_image(request, pk):
     img.img.delete()
     img.delete()
     return redirect('index')
+
+
+# Низкоуровневые средства для выгруженных файлов
+# FILES_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# Добавление
+# def add_image(request):
+#     if request.method == 'POST':
+#         form = ImgForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             uploaded_file = request.FILES['img']
+#             fn = '%s%s' % (datetime.now().timestamp(), os.path.splitext(uploaded_file.name)[1])
+#             fn = os.path.join(FILES_ROOT, fn)
+#             with open(fn, 'wb+') as destination:
+#                 for chunk in uploaded_file.chunks():
+#                     destination.write(chunk)
+#             # form.save()
+#             return redirect('index')
+#     else:
+#         form = ImgForm()
+#     context = {'form': form}
+#     return render(request, 'bboard/add_image.html', context)
+
+
+# Вывод
+# def index_files(request):
+#     imgs = []
+#     for entry in os.scandir(FILES_ROOT):
+#         imgs.append(os.path.basename(entry))
+#     context = {'imgs': imgs}
+#     return render(request, 'bboard/index_files.html', context)
+#
+#
+# # Отправка файла клиенту
+# def get(request, filename):
+#     fn = os.path.join(FILES_ROOT, filename)
+#     return FileResponse(open(fn, 'rb'), content_type='application/octet-stream')

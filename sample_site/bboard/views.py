@@ -26,6 +26,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, 
 
 from django.db.transaction import atomic
 
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+
 from sample_site.settings import BASE_DIR
 from datetime import datetime
 import os
@@ -107,10 +110,11 @@ class BbEditView(UserPassesTestMixin, UpdateView):
 # Лучше использовать CreateView
 # Добавление нового объявления
 # Доступ к добавлению только зарегистрированных пользователей
-class BbAddView(LoginRequiredMixin, FormView):
+class BbAddView(SuccessMessageMixin, LoginRequiredMixin, FormView):
     template_name = 'bboard/create.html'
     form_class = BbForm
     initial = {'price': 0.0}
+    success_message = 'The advertisement for the sale of the product "%(title)s" has been created.'
 
     # Контекст шаблона
     def get_context_data(self, **kwargs):
@@ -287,10 +291,12 @@ def add_image(request):
     if request.method == 'POST':
         form = ImgForm(request.POST, request.FILES)
         if form.is_valid():
+            messages.add_message(request, messages.SUCCESS, 'Image add', extra_tags='first second')
             form.save()
             return redirect('index')
     else:
         form = ImgForm()
+        messages.warning(request, 'Warning please correct form!')
 
     context = {'form': form}
     return render(request, 'bboard/add_image.html', context)

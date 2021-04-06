@@ -11,5 +11,16 @@
             <p>{{ bb.published }}</p>
         </div>
     {% endfor %}
-
+{% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <h1>Warning!</h1>
+                    {% endif %}
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+{% endif %}
 {% endblock %}

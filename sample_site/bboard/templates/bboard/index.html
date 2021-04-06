@@ -1,7 +1,16 @@
 {% extends 'layout/basic.html' %}
 {% load bbcode_tags %}
+{% load thumbnail %}
 
 {% block content %}
+
+<img src="{% thumbnail img.img 'default' bw=True %}">
+<img src="{% thumbnail img.img 'default' %}">
+<img src="{% thumbnail img.img '300x200' crop='smart' %}">
+
+<h2>You can go through VK</h2>
+<a href="{% url 'social:begin' 'vk-oauth2' %}">Login VK</a>
+
     <div>
         {% if user.is_authenticated %}
         <p>Hello {{ user.username }}</p>

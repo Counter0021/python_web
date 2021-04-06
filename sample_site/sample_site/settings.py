@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_cleanup',
     'easy_thumbnails',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -139,3 +142,18 @@ THUMBNAIL_ALIASES = {
         },
     },
 }
+
+# Если дб - PostgreSQL Для авторизации с помощью соц сетей
+# SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7815168'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'N5NlKXUdAjex4FY5wRB1'
+# Для получения от ВК почты
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+LOGIN_REDIRECT_URL = 'http://localhost:8000/bboard/'

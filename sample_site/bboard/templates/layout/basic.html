@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
 {% load bootstrap4 %}
-{% load thumbnail %}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -28,9 +27,6 @@
         </nav>
         <section>
             {% block content %}
-            <img src="{% thumbnail img.img 'default' bw=True %}">
-            <img src="{% thumbnail img.img 'default' %}">
-            <img src="{% thumbnail img.img '300x200' crop='smart' %}">
             {% endblock %}
         </section>
 

@@ -61,6 +61,10 @@ class Rubric(models.Model):
         verbose_name_plural = 'Rubrics'
         verbose_name = 'Rubric'
         ordering = ['name']
+        # Добавление прав
+        permissions = (
+            ('hide_rubrics', 'Hide rubrics'),
+        )
 
     def __str__(self):
         return self.name
@@ -122,3 +126,9 @@ class Img(models.Model):
     # def delete(self, *args, **kwargs):
     #     self.img.delete(save=False)
     #     super().delete(*args, **kwargs)
+
+
+# Создание своих пользователей
+class Profile(models.Model):
+    phone = models.CharField(max_length=20)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)

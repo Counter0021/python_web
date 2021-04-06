@@ -194,14 +194,13 @@ def index(request):
     # Выполнил ли юзер вход?
     # if request.user.is_authenticated:
     bbs = Bb.objects.all()
-    rubrics = Rubric.objects.all()
     paginator = Paginator(bbs, 2)
     if 'page' in request.GET:
         page_num = request.GET['page']
     else:
         page_num = 1
     page = paginator.get_page(page_num)
-    context = {'rubrics': rubrics, 'page': page, 'bbs': page.object_list}
+    context = {'page': page, 'bbs': page.object_list}
     return render(request, 'bboard/index.html', context)
 
 
@@ -303,7 +302,6 @@ def delete_image(request, pk):
     img.img.delete()
     img.delete()
     return redirect('index')
-
 
 # Низкоуровневые средства для выгруженных файлов
 # FILES_ROOT = os.path.join(BASE_DIR, 'media')

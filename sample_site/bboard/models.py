@@ -4,6 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from precise_bbcode.fields import BBCodeTextField
 
+from django.db.models.signals import post_save
+
 
 # Собственный набор записей, вычисляющий количество объявлений в каждой рубрике, сортирующий по убыванию количества
 class RubricQuerySet(models.QuerySet):
@@ -132,3 +134,13 @@ class Img(models.Model):
 class Profile(models.Model):
     phone = models.CharField(max_length=20)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+# Сигналы
+# Сигнал в консоль, о добавлении объявления
+def post_save_dispatcher(sender, **kwargs):
+    if kwargs['created']:
+        print(f'Advertisement in {kwargs["instance"].rubric.name} create')
+
+
+post_save.connect(post_save_dispatcher, sender=Bb)

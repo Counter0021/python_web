@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import BbIndexView, BbByRubricView, BbAddView, BbDetailView, BbEditView, BbDeleteView, BbRedirectView, \
-    rubrics, bbs, formset_processing, add_image, delete_image
+    rubrics, bbs, formset_processing, add_image, delete_image, api_rubrics, api_rubric_detail
     # get
 
 urlpatterns = [
@@ -22,4 +22,6 @@ urlpatterns = [
     path('bbs/<int:rubric_id>', bbs, name='bbs'),
     path('form/', formset_processing, name='form'),
     # path('get/<path:filename>', get, name='get'),
+    path('api/rubrics/', api_rubrics),
+    path('api/rubrics/<int:pk>/', api_rubric_detail),
 ]

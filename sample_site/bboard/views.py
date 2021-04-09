@@ -34,6 +34,11 @@ from datetime import datetime
 import os
 from django.http import FileResponse
 
+from django.http import JsonResponse
+from .serializers import RubricSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
 # Смешанная функциональность (Вывод сведенья о выбранной записи и набор связанных с ней записей)
@@ -345,3 +350,23 @@ def delete_image(request, pk):
 # def get(request, filename):
 #     fn = os.path.join(FILES_ROOT, filename)
 #     return FileResponse(open(fn, 'rb'), content_type='application/octet-stream')
+
+
+# Вывод клиентам список рубрик в JSON (REST)
+# Веб представление
+@api_view(['GET'])
+def api_rubrics(request):
+    if request.method == 'GET':
+        rubrics = Rubric.objects.all()
+        serializer = RubricSerializer(rubrics, many=True)
+        return Response(serializer.data)
+        # return JsonResponse(serializer.data, safe=False)
+
+
+# Сведения об отдельной рубрике
+@api_view(['GET'])
+def api_rubric_detail(request, pk):
+    if request.method == 'GET':
+        rubric = Rubric.objects.get(pk=pk)
+        serializer = RubricSerializer(rubric)
+        return Response(serializer.data)

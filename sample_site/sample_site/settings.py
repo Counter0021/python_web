@@ -44,9 +44,12 @@ INSTALLED_APPS = [
     'django_cleanup',
     'easy_thumbnails',
     'social_django',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'bboard.middlewares.RubricsMiddleware',
+    #'bboard.middlewares.RubricsMiddleware',
 ]
 
 ROOT_URLCONF = 'sample_site.urls'
@@ -132,6 +135,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Библиотека THUMBNAIL
 THUMBNAIL_ALIASES = {
     '': {
         'default': {
@@ -148,6 +152,7 @@ THUMBNAIL_ALIASES = {
 # Если дб - PostgreSQL Для авторизации с помощью соц сетей
 # SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
+# Авторизация при помощи соц сетей
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
@@ -159,3 +164,8 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = 'N5NlKXUdAjex4FY5wRB1'
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 
 LOGIN_REDIRECT_URL = 'http://localhost:8000/bboard/'
+
+# Настройки CORS и REST
+# Все домены, но с префиксом api
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'

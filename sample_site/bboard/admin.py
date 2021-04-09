@@ -1,6 +1,17 @@
 from django.contrib import admin
+from django.urls import reverse
 
 from .models import Bb, Rubric, Img
+from django.db.models import F
+
+
+# Уменьшение цен X2
+def discount(modeladmin, request, queryset):
+    f = F('price')
+    for rec in queryset:
+        rec.price = f / 2
+        rec.save()
+    modeladmin.message_user(request, 'Action complete')
 
 
 # Фильтрация объявлений по цене
@@ -24,6 +35,8 @@ class PriceListFilter(admin.SimpleListFilter):
             return queryset.filter(price__gt=5000)
 
 
+# Декоратор - редактор
+# @admin.register(Bb)
 # Свои параметры представления модели
 class BbAdmin(admin.ModelAdmin):
     # Последовательность имён полей, которые должны выводиться в списке записей
@@ -48,8 +61,48 @@ class BbAdmin(admin.ModelAdmin):
 
     # Только для чтения
     readonly_fields = ('title', 'published')
+    # Радио кнопки вместо списка с рубриками
+    radio_fields = {'rubric': admin.VERTICAL}
+
+    # Создание слага из заголовка
+    # prepopulated_fields = {'slug': ('title',)}
+
+    # Гиперссыдка на запись модели(Смотреть на сайте)
+    def view_on_site(self, rec):
+        return reverse('detail', kwargs={'pk': rec.pk})
+
+    # Регестрация действий
+    actions = (discount,)
+
+
+# Встроенный редактор
+# Обслуживание модели Bb и вывод объявлений из текущей рубрики
+class BbInline(admin.StackedInline):
+    model = Bb
+
+    # 8 Форм при создании и 3 при правке
+    def get_extra(self, request, obj=None, **kwargs):
+        if obj:
+            return 3
+        else:
+            return 8
+
+
+# Модель рубрик
+class RubricAdmin(admin.ModelAdmin):
+    inlines = [BbInline]
+
+    # Вывод набора форм только на странице добавления
+    def get_inlines(self, request, obj):
+        if obj:
+            return ()
+        else:
+            return (BbInline,)
 
 
 admin.site.register(Bb, BbAdmin)
-admin.site.register(Rubric)
+admin.site.register(Rubric, RubricAdmin)
 admin.site.register(Img)
+
+# Название функции discount()
+discount.short_description = 'Reduce the price by half'

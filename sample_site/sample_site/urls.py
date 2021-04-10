@@ -6,6 +6,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from django.contrib.staticfiles.views import serve
+from django.views.static import serve as media_serve
+
 from django.views.decorators.cache import never_cache
 
 urlpatterns = [
@@ -36,8 +38,13 @@ urlpatterns = [
     path('social/', include('social_django.urls', namespace='social')),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Отключить кэширование статических файлов на стороне клиента
 # if settings.DEBUG:
 #     urlpatterns.append(path('static/<path:path>', never_cache(serve)))
+
+# Публикация сайта. Обработка статических файлов
+if not settings.DEBUG:
+    urlpatterns.append(path('static/<path:path>', serve, {'insecure': True}))
+    urlpatterns.append(path('media/<path:path>', media_serve, {'document_root': settings.MEDIA_ROOT}))

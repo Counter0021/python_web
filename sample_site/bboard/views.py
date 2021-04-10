@@ -38,6 +38,10 @@ from django.http import JsonResponse
 from .serializers import RubricSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
@@ -352,21 +356,105 @@ def delete_image(request, pk):
 #     return FileResponse(open(fn, 'rb'), content_type='application/octet-stream')
 
 
-# Вывод клиентам список рубрик в JSON (REST)
+# Вывод клиентам список рубрик в JSON (REST), Добавление рубрики
 # Веб представление
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_rubrics(request):
     if request.method == 'GET':
         rubrics = Rubric.objects.all()
         serializer = RubricSerializer(rubrics, many=True)
         return Response(serializer.data)
         # return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'POST':
+        serializer = RubricSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Сведения об отдельной рубрике
-@api_view(['GET'])
+# Изменение и удаление рубрики
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def api_rubric_detail(request, pk):
+    rubric = Rubric.objects.get(pk=pk)
     if request.method == 'GET':
-        rubric = Rubric.objects.get(pk=pk)
         serializer = RubricSerializer(rubric)
         return Response(serializer.data)
+    elif request.method == 'PUT' or request.method == 'PATCH':
+        serializer = RubricSerializer(rubric, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        rubric.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Низкий уровень
+# # Вывод рубрик и их добавление класс
+# class APIRubrics(APIView):
+#     def get(self, request):
+#         rubrics = Rubric.objects.all()
+#         serializer = RubricSerializer(rubrics, many=True)
+#         return Response(serializer.data)
+#
+#     def post(self, request):
+#         serializer = RubricSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# # Правка, получение и удаление рубрики
+# class APIRubricDetail(APIView):
+#     def get(self, request, pk):
+#         rubric = Rubric.objects.get(pk=pk)
+#         serializer = RubricSerializer(rubric)
+#         return Response(serializer.data)
+#
+#     def put(self, request, pk):
+#         rubric = Rubric.objects.get(pk=pk)
+#         serializer = RubricSerializer(rubric, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#     def delete(self, request, pk):
+#         rubric = Rubric.objects.get(pk=pk)
+#         rubric.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Высокий уровень
+# Добавление и выдача рубрик
+class APIRubrics(generics.ListCreateAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+# Правка, удаление и получение рубрики
+class APIRubricDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+# Вывод рубрик
+class APIRubricList(generics.ListAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+# # Метаконтроллер класс, выполняющий все действия классов APIRubric и APIRubricDetail
+# class APIRubricViewSet(ModelViewSet):
+#     queryset = Rubric.objects.all()
+#     serializer_class = RubricSerializer
+
+
+# Метаконтроллер класс, только для чтения рубрик
+class APIRubricViewSet(ReadOnlyModelViewSet):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer

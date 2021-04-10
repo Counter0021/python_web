@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load bootstrap4 %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Home{% endblock %}</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
+    {% bootstrap_javascript jquery='slim' %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body class="container-fluid">
+    <header class="mb-4">
+        <h1 class="display-1 text-center">Advertisements</h1>
+    </header>
+    <div class="row">
+        <ul class="col nav justify-content-end border">
+            <li class="nav-item"><a class="nav-link" href="#">Registration</a></li>
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown"
+            href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">My advertisements</a>
+                    <a class="dropdown-item" href="#">Change personal data</a>
+                    <a class="dropdown-item" href="#">Change password</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Log Out</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Delete</a>
+                </div>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <nav class="col-md-auto nav flex-column border">
+            <a class="nav-link root" href="{% url 'main:index' %}">Home</a>
+            <span class="nav-link root font-weight-bold">Property</span>
+            <a class="nav-link" href="#">Housing</a>
+            <a class="nav-link" href="#">Warehouses</a>
+            <a class="nav-link" href="#">Garages</a>
+            <span class="nav-link root font-weight-bold">Transport</span>
+            <a class="nav-link" href="#">Car</a>
+            <a class="nav-link" href="#">Truck</a>
+        </nav>
+        <section class="col border py-2">
+            {% bootstrap_messages %}
+            {% block content %}
+            {% endblock %}
+        </section>
+    </div>
+    <footer class="mt-3">
+        <p class="text-right font-italic">&copy; readers.</p>
+    </footer>
+</body>
+</html>

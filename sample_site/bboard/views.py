@@ -36,12 +36,13 @@ from django.http import FileResponse
 
 from django.http import JsonResponse
 from .serializers import RubricSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.permissions import IsAuthenticated
 
 
 # Лучше избегать (взять контроллер более низкого лвла и реализовывать там всю логику самостоятельно)
@@ -359,6 +360,8 @@ def delete_image(request, pk):
 # Вывод клиентам список рубрик в JSON (REST), Добавление рубрики
 # Веб представление
 @api_view(['GET', 'POST'])
+# Права доступа
+@permission_classes((IsAuthenticated,))
 def api_rubrics(request):
     if request.method == 'GET':
         rubrics = Rubric.objects.all()
@@ -440,6 +443,8 @@ class APIRubrics(generics.ListCreateAPIView):
 class APIRubricDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rubric.objects.all()
     serializer_class = RubricSerializer
+    # Права доступа
+    permission_classes = (IsAuthenticated,)
 
 
 # Вывод рубрик

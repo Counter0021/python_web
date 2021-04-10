@@ -169,3 +169,9 @@ LOGIN_REDIRECT_URL = 'http://localhost:8000/bboard/'
 # Все домены, но с префиксом api
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}

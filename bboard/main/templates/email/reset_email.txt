@@ -1,0 +1,8 @@
+{% autoescape off %}
+Respected {{ user.username }}!
+You have submitted a password reset request. To reset, go at this internet address:
+{{ protocol }}://{{ domain }}{% url 'main:password_reset_confirm_user' uidb64=uid token=token %}
+
+Goodbye!
+Best regards, administration of the site "Notice board".
+{% endautoescape %}

@@ -126,3 +126,4 @@ AUTH_USER_MODEL = 'main.AdvUser'
 
 # Отправка эл. писем
 EMAIL_PORT = 1025
+# python -m smtpd -n -c Debuggingserver localhost:1025

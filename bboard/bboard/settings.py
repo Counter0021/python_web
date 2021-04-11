@@ -123,3 +123,6 @@ STATIC_URL = '/static/'
 
 # Модель пользователя
 AUTH_USER_MODEL = 'main.AdvUser'
+
+# Отправка эл. писем
+EMAIL_PORT = 1025

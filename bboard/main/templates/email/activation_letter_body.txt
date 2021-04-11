@@ -1,0 +1,11 @@
+Dear user {{ user.username }}!
+
+You have registered on the site "Notice board".
+You need to complete an activation to verify your identity.
+To do this, please follow the link
+
+{{ host }}{% url 'main:register_activate' sign=sign %}
+
+Bye!
+
+Best regards, administration of the site "Notice board"

@@ -19,7 +19,7 @@
     </header>
     <div class="row">
         <ul class="col nav justify-content-end border">
-            <li class="nav-item"><a class="nav-link" href="#">Registration</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'main:register' %}">Registration</a></li>
             {% if user.is_authenticated %}
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown"
             href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>

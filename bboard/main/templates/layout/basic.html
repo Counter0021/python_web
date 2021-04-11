@@ -20,19 +20,22 @@
     <div class="row">
         <ul class="col nav justify-content-end border">
             <li class="nav-item"><a class="nav-link" href="#">Registration</a></li>
+            {% if user.is_authenticated %}
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown"
             href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">My advertisements</a>
+                    <a class="dropdown-item" href="{% url 'main:profile' %}">My advertisements</a>
                     <a class="dropdown-item" href="#">Change personal data</a>
                     <a class="dropdown-item" href="#">Change password</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Log Out</a>
+                    <a class="dropdown-item" href="{% url 'main:logout' %}">Logout</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Delete</a>
                 </div>
             </li>
-            <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'main:login' %}">Login</a></li>
+            {% endif %}
         </ul>
     </div>
     <div class="row">
@@ -45,6 +48,7 @@
             <span class="nav-link root font-weight-bold">Transport</span>
             <a class="nav-link" href="#">Car</a>
             <a class="nav-link" href="#">Truck</a>
+            <a class="nav-link root" href="{% url 'main:other' page='about' %}">About site</a>
         </nav>
         <section class="col border py-2">
             {% bootstrap_messages %}

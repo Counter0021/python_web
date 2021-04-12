@@ -1,6 +1,9 @@
 from django.template.loader import render_to_string
 from django.core.signing import Signer
 
+from datetime import datetime
+from os.path import splitext
+
 from bboard.settings import ALLOWED_HOSTS
 
 # Создание цифровой подписи
@@ -17,3 +20,8 @@ def send_activation_notification(user):
     subject = render_to_string('email/activation_letter_subject.txt', context)
     body_text = render_to_string('email/activation_letter_body.txt', context)
     user.email_user(subject, body_text)
+
+
+# Генерация имён сохраняемых в модели выгруженных файлов
+def get_timestamp_path(instance, filename):
+    return f'{datetime.now().timestamp()}{splitext(filename)[1]}'

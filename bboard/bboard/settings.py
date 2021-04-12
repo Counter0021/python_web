@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'bootstrap4',
     'social_django',
+    'django_cleanup',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +147,20 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = '7821700'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SAQmir2DsR6i1odE46dV'
 # Для получения от ВК почты
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+# Выгруженные файлы
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+# Настройки Миниатюр
+THUMBNAIL_ALIASES = {
+    '': {
+        'default': {
+            'size': (96, 96),
+            'crop': 'scale',
+        },
+    },
+}
+
+# Папка для хранения миниатюр
+THUMBNAIL_BASEDIR = 'thumbnails'

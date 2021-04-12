@@ -22,8 +22,11 @@ from .utilities import signer
 
 
 # Home page
+# Вывод последних 10 объявлений
 def index(request):
-    return render(request, 'main/index.html')
+    bbs = Bb.objects.filter(is_active=True)[:10]
+    context = {'bbs': bbs}
+    return render(request, 'main/index.html', context)
 
 
 # Вывод вспомогательных страниц в 1 контроллере

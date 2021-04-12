@@ -43,13 +43,12 @@
     <div class="row">
         <nav class="col-md-auto nav flex-column border">
             <a class="nav-link root" href="{% url 'main:index' %}">Home</a>
-            <span class="nav-link root font-weight-bold">Property</span>
-            <a class="nav-link" href="#">Housing</a>
-            <a class="nav-link" href="#">Warehouses</a>
-            <a class="nav-link" href="#">Garages</a>
-            <span class="nav-link root font-weight-bold">Transport</span>
-            <a class="nav-link" href="#">Car</a>
-            <a class="nav-link" href="#">Truck</a>
+            {% for rubric in rubrics %}
+                {% ifchanged rubric.super_rubric.pk %}
+                    <span class="nav-link root font-weight-bold">{{ rubric.super_rubric.name }}</span>
+                {% endifchanged %}
+                <a class="nav-link" href="{% url 'main:by_rubric' pk=rubric.pk %}">{{ rubric.name }}</a>
+            {% endfor %}
             <a class="nav-link root" href="{% url 'main:other' page='about' %}">About site</a>
         </nav>
         <section class="col border py-2">

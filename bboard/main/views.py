@@ -152,3 +152,9 @@ class PasswordResetConfirmUserView(PasswordResetConfirmView):
 # Уведомление об успешном сброссе пароля
 class PasswordResetCompleteUserView(PasswordResetCompleteView):
     template_name = 'main/complete_password.html'
+
+
+# Рубрики
+# Рубрика
+def by_rubric(request, pk):
+    pass

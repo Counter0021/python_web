@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'bootstrap4',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -127,3 +130,17 @@ AUTH_USER_MODEL = 'main.AdvUser'
 # Отправка эл. писем
 EMAIL_PORT = 1025
 # python -m smtpd -n -c Debuggingserver localhost:1025
+
+# Социальные сети авторизация
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+# Авторизация при помощи соц сетей
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7821700'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SAQmir2DsR6i1odE46dV'
+# Для получения от ВК почты
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']

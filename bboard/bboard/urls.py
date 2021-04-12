@@ -7,6 +7,7 @@ from django.views.decorators.cache import never_cache
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('social/', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:

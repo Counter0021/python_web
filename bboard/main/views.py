@@ -13,9 +13,11 @@ from django.views.generic.base import TemplateView
 from django.core.signing import BadSignature
 from django.contrib.auth import logout
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.db.models import Q
 
-from .models import AdvUser
-from .forms import ChangeUserInfoForm, RegisterUserForm
+from .models import AdvUser, SubRubric, Bb
+from .forms import ChangeUserInfoForm, RegisterUserForm, SearchForm
 from .utilities import signer
 
 
@@ -155,6 +157,26 @@ class PasswordResetCompleteUserView(PasswordResetCompleteView):
 
 
 # Рубрики
-# Рубрика
+# Страница выбранной рубрики
 def by_rubric(request, pk):
-    pass
+    rubric = get_object_or_404(SubRubric, pk=pk)
+    bbs = Bb.objects.filter(is_active=True, rubric=rubric)
+    # Фильтрация по слову
+    if 'keyword' in request.GET:
+        keyword = request.GET['keyword']
+        q = Q(title__icontains=keyword) | Q(content__icontains=keyword)
+        bbs = bbs.filter(q)
+    else:
+        keyword = ''
+
+    form = SearchForm(initial={'keyword': keyword})
+    # Пагинатор с 2 записями
+    paginator = Paginator(bbs, 2)
+    if 'page' in request.GET:
+        page_num = request.GET['page']
+    else:
+        page_num = 1
+
+    page = paginator.get_page(page_num)
+    context = {'rubric': rubric, 'page': page, 'bbs': page.object_list, 'form': form}
+    return render(request, 'main/by_rubric.html', context)

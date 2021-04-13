@@ -1,0 +1,15 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}Change advertisement - profile user{% endblock %}
+
+{% block content %}
+  <h2>Change advertisement</h2>
+  <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        {% bootstrap_formset formset layout='horizontal' %}
+        {% buttons submit='Change' %}{% endbuttons %}
+  </form>
+{% endblock %}

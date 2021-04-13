@@ -31,6 +31,10 @@
                     </a>
                     <div class="media-body">
                         <h3><a href="{{ url }}{{ all }}">{{ bb.title }}</a></h3>
+                        <p class="text-right mt-2">
+                            <a href="{% url 'main:profile_bb_change' pk=bb.pk %}">Change</a>
+                            <a href="{% url 'main:profile_bb_delete' pk=bb.pk %}">Delete</a>
+                        </p>
                     </div>
                 </li>
             {% endfor %}

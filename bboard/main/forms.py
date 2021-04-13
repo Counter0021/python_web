@@ -1,8 +1,9 @@
 # Формы
 from django import forms
-from .models import AdvUser, SuperRubric, SubRubric
+from .models import AdvUser, SuperRubric, SubRubric, Bb, AdditionalImage
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
+from django.forms import inlineformset_factory
 
 from .apps import user_registered
 
@@ -69,3 +70,15 @@ class SubRubricForm(forms.ModelForm):
 # Форма поиска
 class SearchForm(forms.Form):
     keyword = forms.CharField(required=False, max_length=20, label='')
+
+
+# Форма ввода объявления
+class BbForm(forms.ModelForm):
+    class Meta:
+        model = Bb
+        fields = '__all__'
+        widgets = {'author': forms.HiddenInput}
+
+
+# Дополнительные иллюстрации
+AIFormSet = inlineformset_factory(Bb, AdditionalImage, fields='__all__')

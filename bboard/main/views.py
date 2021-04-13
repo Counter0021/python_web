@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
@@ -17,7 +17,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 from .models import AdvUser, SubRubric, Bb
-from .forms import ChangeUserInfoForm, RegisterUserForm, SearchForm
+from .forms import ChangeUserInfoForm, RegisterUserForm, SearchForm, BbForm, AIFormSet
 from .utilities import signer
 
 
@@ -43,10 +43,12 @@ class BBLoginView(LoginView):
     template_name = 'main/login.html'
 
 
-# Профиль пользователя
+# Профиль пользователя, его объявления
 @login_required
 def profile(request):
-    return render(request, 'main/profile.html')
+    bbs = Bb.objects.filter(author=request.user.pk)
+    context = {'bbs': bbs}
+    return render(request, 'main/profile.html', context)
 
 
 # Выход пользователя
@@ -191,3 +193,33 @@ def detail(request, rubric_pk, pk):
     ais = bb.additionalimage_set.all()
     context = {'bb': bb, 'ais': ais}
     return render(request, 'main/detail.html', context)
+
+
+# Объявления пользователя
+@login_required
+def profile_bb_detail(request, pk):
+    bb = get_object_or_404(Bb, pk=pk)
+    ais = bb.additionalimage_set.all()
+    context = {'bb': bb, 'ais': ais}
+    return render(request, 'main/profile_bb_detail.html', context)
+
+
+# Добавление объявлений
+@login_required
+def profile_bb_add(request):
+    if request.method == 'POST':
+        form = BbForm(request.POST, request.FILES)
+        if form.is_valid():
+            bb = form.save()
+            formset = AIFormSet(request.POST, request.FILES, instance=bb)
+            if formset.is_valid():
+                formset.save()
+                messages.add_message(request, messages.SUCCESS, 'Add advertisement')
+                return redirect('main:profile')
+
+    else:
+        form = BbForm(initial={'author': request.user.pk})
+        formset = AIFormSet()
+
+    context = {'form': form, 'formset': formset}
+    return render(request, 'main/profile_bb_add.html', context)

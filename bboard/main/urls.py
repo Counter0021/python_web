@@ -1,12 +1,14 @@
 from django.urls import path
 
-from .views import index, other_page, profile, user_activate, by_rubric, detail
+from .views import index, other_page, profile, user_activate, by_rubric, detail, profile_bb_detail, profile_bb_add
 from .views import BBLoginView, BBLogoutView, ChangeUserInfoView, BBPasswordChangeView, RegisterUserView, \
     RegisterDoneView, DeleteUserView, PasswordResetUserView, PasswordResetDoneUserView, PasswordResetConfirmUserView, \
     PasswordResetCompleteUserView
 
 app_name = 'main'
 urlpatterns = [
+    path('accounts/profile/add/', profile_bb_add, name='profile_bb_add'),
+    path('accounts/profile/<int:pk>/', profile_bb_detail, name='profile_bb_detail'),
     path('accounts/reset/', PasswordResetUserView.as_view(), name='reset_password'),
     path('accounts/reset/done/', PasswordResetDoneUserView.as_view(), name='password_reset_done'),
     path('accounts/reset/<uidb64>/<token>/', PasswordResetConfirmUserView.as_view(),

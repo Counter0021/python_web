@@ -1,5 +1,9 @@
 {% extends "layout/basic.html" %}
 
+{% load thumbnail %}
+{% load bootstrap4 %}
+{% load static %}
+
 {% block title %}Profile user{% endblock %}
 
 {% block content %}
@@ -9,5 +13,27 @@
     {% else %}
         <p>Hello!</p>
     {% endif %}
+    <p><a href="{% url 'main:profile_bb_add' %}">Add advertisement</a></p>
     <h3>Your advertisements</h3>
+    {% if bbs %}
+        <ul class="list-unstyled">
+            {% for bb in bbs %}
+                <li class="media my-5 p-3 border">
+                    {% url 'main:profile_bb_detail' pk=bb.pk as url %}
+                    <a href="{{ url }}{{ all }}">
+                        {% if bb.image %}
+
+                        <img class="mr-3" src="{% thumbnail bb.image 'default' %}">
+                        {% else %}
+                        <img class="mr-3" src="{% static 'main/empty.jpg' %}" style="width: 90px;">
+
+                        {% endif %}
+                    </a>
+                    <div class="media-body">
+                        <h3><a href="{{ url }}{{ all }}">{{ bb.title }}</a></h3>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

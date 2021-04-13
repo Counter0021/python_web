@@ -1,0 +1,9 @@
+Dear user {{ author }}!
+
+A new comment was left under your announcement {{ comment.bb.title }}.
+Follow the link to the page to view the comments left:
+{{ host }}{% url 'main:detail' rubric_pk=comment.bb.rubric.pk pk=comment.bb.pk %}
+
+Bye!
+
+Best regards, administration of the site "Notice board"

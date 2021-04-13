@@ -115,6 +115,9 @@ class Comment(models.Model):
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Active?')
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Published')
 
+    def __str__(self):
+        return f'{self.author} - {self.bb}'
+
     class Meta:
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'

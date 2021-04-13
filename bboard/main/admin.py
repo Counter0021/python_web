@@ -85,7 +85,13 @@ class BbAdmin(admin.ModelAdmin):
     inlines = (AdditionalImageInline, CommentInline)
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('author', 'bb', 'content', 'is_active', 'created_at')
+    fields = (('author', 'bb'), 'content', 'is_active')
+
+
 admin.site.register(AdvUser, AdvUserAdmin)
 admin.site.register(SuperRubric, SuperRubricAdmin)
 admin.site.register(SubRubric, SubRubricAdmin)
 admin.site.register(Bb, BbAdmin)
+admin.site.register(Comment, CommentAdmin)

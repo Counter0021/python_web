@@ -82,6 +82,9 @@ class Bb(models.Model):
     is_active = models.BooleanField(default=True, db_index=True, verbose_name='Active?')
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Published')
 
+    def __str__(self):
+        return self.title
+
     # Удаление со связанными илюстрациями
     def delete(self, *args, **kwargs):
         for ai in self.additionalimage_set.all():

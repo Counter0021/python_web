@@ -25,7 +25,7 @@ from .utilities import signer
 # Home page
 # Вывод последних 10 объявлений
 def index(request):
-    bbs = Bb.objects.filter(is_active=True)[:10]
+    bbs = Bb.objects.filter(is_active=True)[0:10]
     context = {'bbs': bbs}
     return render(request, 'main/index.html', context)
 
